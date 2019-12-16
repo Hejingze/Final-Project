@@ -1,0 +1,132 @@
+{
+    "items": {
+    "Water": {
+    "desc": ""
+    "title": ""},
+
+    "Tooth-Socket": {
+    "desc": ""
+    "title": ""}
+    "Shirt": {
+    "desc": ""
+    "title": ""},
+
+    "Ball": {
+    "desc": ""
+    "title": ""}},
+
+    "teams": {
+    "NBA-Team-Show": {"desc": ""
+    "title": ""},
+    "shirt-wear": {
+    "desc": ""
+    "title": ""},
+    "Lakers": {
+    "desc": ""
+    "title": ""},
+    "Warriors": {
+    "desc": ""
+    "title": ""},
+    "Bulls": {
+    "desc": ""
+    "title": ""}},
+
+        "Cleveland": {
+        "dir": {"north": "Airport"},
+        "thingsToGet": ["Water"],
+        "title": "in the Cleveland Cavaliers Team. You can 'look' to get direction and items. Also the hints! ",
+        "desc": "You need to win the game with Lakers, Bulls and Warriors to get the champion of NBA. The sequence of the Game is unchangable. You must have a fight with Lakers first, then Bulls, then Warriors. ",
+        "events": {
+        "GamePoint": {
+        "toDO": "'reward' if you beat all the three NBA teams->Lakers, Bulls, Warriors. ",
+        "toReturn": "Game Finished. Congratulations! You are the Champion of NBA Teams! This is the NBA Ring for you, Lebron James! ",
+        "require": ["Won-Lakers", "Won-Bulls", "Won-Warriors"],
+        "answer": ["reward"],
+        "finished": "NBA-Team-Show",
+        "moves": ["[:won] #(assoc % :won true)"]}}},
+        "Airport": {
+        "desc": "Now, you have three choices. Go North to fight with Lakers, Go West to fight with Bulls, Go East to fight with Warriors. Of Course, if you are afraid, Go South to Cleveland. ",
+        "title": "at the Airport",
+        "dir": {
+        "north": "Los-Angeles-Lakers",
+        "south": "Cleveland",
+        "west": "Chicago-Bulls",
+        "east": "Golden-State-Warriors"},
+        "thingsToGet": ["Shirt"]},
+
+        "Chicago-Bulls": {
+        "desc": "Now you are ready to fight with Bulls. However, your team did not have enough water supply. You should 'pick' some water from Cleveland. And 'drink' it. ",
+        "title": "in Chicago United Center",
+        "dir": {"east": "Airport"},
+        "thingsToGet": ["Ball"],
+        "events": {
+        "drink": {
+        "toDO": "Your team forgot to bring water supply. You need the water so that you will have enough energy to fight.",
+        "toReturn": "Great! Now you have enough water. Let's move into the basketball playground",
+        "require": ["Water"],
+        "answer": ["drink"],
+        "requirement": "Bulls",
+        "moves": ["[:map :Chicago-Bulls :dir] #(assoc % :north \"playground\")","[:map :Cleveland :thingsToGet] #(conj % \"Ball\")","[:map :Chicago-Bulls :events] #(dissoc % :drink)"]}}},
+        "playground": {
+        "desc": "Cool. You are in the Chicago Center Playground. Many People. Fight with Chicago Bulls right now. On, your team does not have basketball, you need to 'pick' a Bull from Bulls and 'shoot the ball' to win. ",
+        "title": "in the playground",
+        "dir": {"south": "Chicago-Bulls"},
+        "thingsToGet": [],
+        "events": {
+        "defense": {
+        "toDO": "You need to have a ball",
+        "toReturn": "Great job! We now have the ball",
+        "require": ["Ball"],
+        "answer": ["shoot the ball"],
+        "moves": ["[:map :playground :events :shootBall] #(clojure.set/rename-keys % {:toDO-hidden :toDO})","[:map :playground :events] #(dissoc % :defense)"]},
+        "shootBall": {
+        "toDO-hidden": "You need to shoot the ball to end game",
+        "toReturn": "Cool. You now won the game by shooting the three points ball. Let's move to Warriors Court",
+        "require": ["Ball"],
+        "answer": ["shoot"],
+        "finished": "Bulls",
+        "moves": ["[:inventory] #(conj % \"Won-Bulls\")","[:map :playground :events] #(dissoc % :shootBall)"]}}},
+
+        "Golden-State-Warriors": {
+        "desc": "Great place San Francisco. The sunshine in California is beautiful. But you have to win the game with Warriors so you can enjoy the sunshine. Before the game, you need to wear your Number 6 Shirt. You lost it? Where? Probably in the Airpot Hotel! Find it and 'wear' it! ",
+        "title": "in the Golden State",
+        "dir": {"west": "Airport"},
+        "thingsToGet": [],
+        "events": {
+        "example": {
+        "toDO": "You lost your number 6 shirt. You remember to take it with you. It must be lost.",
+        "toReturn": "Good! you now wear the shirt is able to enter into the Chase Center. ",
+        "require": ["Shirt"],
+        "answer": ["wear"],
+        "finished": "shirt-wear",
+        "requirement": "Warriors",
+        "moves": ["[:inventory] #(disj % (name :Shirt))","[:map :Golden-State-Warriors :dir] #(assoc % :south \"Chase-Center\")","[:map :Golden-State-Warriors :events] #(dissoc % :example)"]}}},
+
+        "Chase-Center": {
+        "desc": "Welcome to the Chase Center. You see Curry, Thompthon. They are good shooters. You need to 'shoot' to end the game! ",
+        "title": "in the Golden State playground",
+        "dir": {"north": "Golden-State-Warriors"},
+        "thingsToGet": [],
+        "events": {
+        "shoot": {
+        "toDO": "you should shoot the ball",
+        "toReturn": "Wow. You end the game with three point shooting. Your team will get the champion. Excellent. Go back to Cleveland and 'reward'! ",
+        "answer": ["shoot"],
+        "require": ["Won-Lakers"],
+        "finished": "Warriors",
+        "moves": ["[:inventory] #(conj % \"Won-Warriors\")","[:map :Chase-Center :events] #(dissoc % :shoot)"]}}},
+
+        "Los-Angeles-Lakers": {
+        "desc": "Wow, you see Kobe Bryant. The defense must be hard. Remember to 'pick Tooth-Socket'. And 'put' it. The Tooth socket can protect you from the defense. ",
+        "title": "in the Los Angeles Center",
+        "dir": {"south": "Airport"},
+        "thingsToGet": ["Tooth-Socket"],
+        "events": {
+        "Dunk": {
+        "toDO": "put on the teeth socket for further instruction.",
+        "toReturn": "Excellent! You now won the game with Lakers after the hard defense. Move To Bulls Court! ",
+        "require": ["Tooth-Socket"],
+        "answer": ["put"],
+        "finished": "Lakers",
+        "moves": ["[:requirements]  #(do % (:requirements (adventure.core/Request \"Lakers\" player))))","[:inventory] #(conj % \"Won-Lakers\")","[:map :Los-Angeles-Lakers :events] #(dissoc % :Dunk)"]}}}
+}
