@@ -34,7 +34,7 @@
         "Cleveland": {
         "dir": {"north": "Airport"},
         "thingsToGet": ["Water"],
-        "title": "in the Cleveland Cavaliers Team. You can 'look' to get direction and items. Also the hints! ",
+        "title": "in the Cleveland Cavaliers Team. You can 'look' to get direction. Type 'i' will show you the items you have. ",
         "desc": "You need to win the game with Lakers, Bulls and Warriors to get the champion of NBA. The sequence of the Game is unchangable. You must have a fight with Lakers first, then Bulls, then Warriors. ",
         "events": {
         "GamePoint": {
