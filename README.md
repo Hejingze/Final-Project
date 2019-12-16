@@ -37,6 +37,7 @@ w
 e
 look
 i
+pick Tooth-Socket
 pick Ball
 pick Shirt
 pick Water
