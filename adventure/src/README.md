@@ -30,7 +30,7 @@ The last thing is Congratulations. Go back to Cleveland. Type 'reward'. Then Gam
 
 Good Luck!
 
-## actions you can Type
+## Actions you can Type
 n
 s
 w
